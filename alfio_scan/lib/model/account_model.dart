@@ -16,7 +16,7 @@ class AccountModel extends ChangeNotifier {
 
   loadData() async {
 
-    // TODO load account basic info from storage and call API to populalate details
+    // TODO load account basic info from storage and call API to populate details
     
     addAccountFromJson("{\"baseUrl\":\"https://m4.test.alf.io\",\"apiKey\":\"2a47074c-6988-4024-91a2-09d1b9d67996\"}");
 
