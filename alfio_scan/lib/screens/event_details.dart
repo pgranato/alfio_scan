@@ -114,7 +114,7 @@ class _EventDetailsWidgetState extends State<EventDetailsWidget> {
                   Provider.of<StatEventModel>(context, listen: false).setAccountData(account, event);
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AttendeeScannerScreenWidget(event: event)),
+                    MaterialPageRoute(builder: (context) => AttendeeScannerScreenWidget(account: account, event: event)),
                   );
                 },
                 text: 'Scan Attendees',

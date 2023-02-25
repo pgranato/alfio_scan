@@ -16,7 +16,7 @@ class AccountScannerScreenWidget extends StatefulWidget {
 }
 
 class _AccountScannerScreenWidgetState extends State<AccountScannerScreenWidget> {
-  MobileScannerController cameraController = MobileScannerController();
+  MobileScannerController cameraController = MobileScannerController(  );
 
   @override
   Widget build(BuildContext context) {
@@ -59,17 +59,18 @@ class _AccountScannerScreenWidgetState extends State<AccountScannerScreenWidget>
           ],
         ),
         body: MobileScanner(
-            allowDuplicates: false,
-            controller: cameraController,
-            onDetect: (barcode, args) {
-              if (barcode.rawValue == null) {
-                debugPrint('Failed to scan Barcode');
-              } else {
-                final String code = barcode.rawValue!;
-                debugPrint('Barcode found! $code');
-                //TODO
-                Provider.of<AccountModel>(context, listen: false).addAccountFromJson("{\"baseUrl\":\"https://m4.test.alf.io\",\"apiKey\":\"2a47074c-6988-4024-91a2-09d1b9d67996\"}");
-              }
-            }));
+          controller: cameraController,
+          allowDuplicates: false,
+          onDetect: (barcode, args) {
+            if (barcode.rawValue == null) {
+              debugPrint('Failed to scan Barcode');
+            } else {
+              final String code = barcode.rawValue!;
+              debugPrint('Barcode found! $code');
+              //TODO
+              Provider.of<AccountModel>(context, listen: false).addAccountFromJson("{\"baseUrl\":\"https://m4.test.alf.io\",\"apiKey\":\"2a47074c-6988-4024-91a2-09d1b9d67996\"}");
+            }
+          },
+        ));
   }
 }

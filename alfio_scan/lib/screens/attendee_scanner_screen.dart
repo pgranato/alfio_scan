@@ -1,3 +1,4 @@
+import 'package:alfio_scan/components/scan_attendee_result.dart';
 import 'package:intl/intl.dart';
 
 import '../flutter_flow/flutter_flow_theme.dart';
@@ -10,21 +11,26 @@ import 'package:provider/provider.dart';
 import '../model/account_model.dart';
 import '../model/event_model.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 
 import '../model/stat_event_model.dart';
 
 class AttendeeScannerScreenWidget extends StatefulWidget {
-  AttendeeScannerScreenWidget({Key? key, required this.event}) : super(key: key);
+  AttendeeScannerScreenWidget({Key? key, required this.account, required this.event}) : super(key: key);
 
+  Account account;
   Event event;
 
   @override
-  _AttendeeScannerScreenWidgetState createState() => _AttendeeScannerScreenWidgetState(event);
+  _AttendeeScannerScreenWidgetState createState() => _AttendeeScannerScreenWidgetState(account, event);
 }
 
 class _AttendeeScannerScreenWidgetState extends State<AttendeeScannerScreenWidget> {
-  _AttendeeScannerScreenWidgetState(this.event);
+  _AttendeeScannerScreenWidgetState(this.account, this.event);
 
+  Account account;
   Event event;
   MobileScannerController cameraController = MobileScannerController();
 
@@ -52,7 +58,7 @@ class _AttendeeScannerScreenWidgetState extends State<AttendeeScannerScreenWidge
           ),
           title: Text(
             event.name,
-            style: FlutterFlowTheme.of(context).title2,
+            style: FlutterFlowTheme.of(context).subtitle1,
           ),
           actions: [
             IconButton(
@@ -71,22 +77,6 @@ class _AttendeeScannerScreenWidgetState extends State<AttendeeScannerScreenWidge
               iconSize: 32.0,
               onPressed: () => cameraController.toggleTorch(),
             ),
-            IconButton(
-              color: Colors.white,
-              icon: ValueListenableBuilder(
-                valueListenable: cameraController.cameraFacingState,
-                builder: (context, state, child) {
-                  switch (state as CameraFacing) {
-                    case CameraFacing.front:
-                      return const Icon(Icons.camera_front);
-                    case CameraFacing.back:
-                      return const Icon(Icons.camera_rear);
-                  }
-                },
-              ),
-              iconSize: 32.0,
-              onPressed: () => cameraController.switchCamera(),
-            ),
           ],
           centerTitle: false,
           elevation: 0,
@@ -95,54 +85,108 @@ class _AttendeeScannerScreenWidgetState extends State<AttendeeScannerScreenWidge
           return Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(20, 12, 20, 0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Expanded(
-                      child: Text(
-                         "${statEventModel.stats.checkedIn} / ${statEventModel.stats.totalAttendees} at ${statEventModel.stats.lastUpdate}",
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(20, 12, 20, 0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "${statEventModel.stats.checkedIn} / ${statEventModel.stats.totalAttendees} at ${statEventModel.stats.lastUpdate}",
                         style: FlutterFlowTheme.of(context).title2,
+                        textAlign: TextAlign.center,
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(20, 12, 20, 0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        'b',
-                        style: FlutterFlowTheme.of(context).title2,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(flex: 1, child: Container()),
               Expanded(
                 flex: 9,
-                child: MobileScanner(
-                    fit: BoxFit.scaleDown,
-                    allowDuplicates: false,
-                    controller: cameraController,
-                    onDetect: (barcode, args) {
-                      if (barcode.rawValue == null) {
-                        debugPrint('Failed to scan Barcode');
-                      } else {
-                        final String code = barcode.rawValue!;
-                        debugPrint('Barcode found! $code');
-                        //TODO
-                        //Provider.of<AccountModel>(context, listen: false).addAccountFromJson("{\"baseUrl\":\"https://m4.test.alf.io\",\"apiKey\":\"2a47074c-6988-4024-91a2-09d1b9d67996\"}");
-                      }
-                    }),
+                child: Container(
+                  decoration: BoxDecoration(color: Color.fromRGBO(100, 100, 100, 1)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(18.0),
+                    child: MobileScanner(
+                        fit: BoxFit.scaleDown,
+                        controller: cameraController,
+                        allowDuplicates: false,
+                        onDetect: (barcode, args) {
+                          if (barcode.rawValue == null) {
+                            debugPrint('Failed to scan Barcode');
+                          } else {
+                            final String code = barcode.rawValue!;
+                            checkinTicket(code, context);
+                          }
+                        }),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(20, 12, 20, 0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "${statEventModel.stats.checkedIn} / ${statEventModel.stats.totalAttendees} at ${statEventModel.stats.lastUpdate}",
+                        style: FlutterFlowTheme.of(context).title2,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           );
         }));
+  }
+
+  Future<void> checkinTicket(String code, BuildContext context) async {
+    debugPrint('Barcode found! $code');
+
+    String tickedId = code.split("/").first;
+    String path = "/admin/api/check-in/event/${event.key}/ticket/$tickedId";
+    var post = await http.post(Uri.parse(account.baseUrl + path), headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'ApiKey ${account.apiKey}',
+    }, body: "{\"code\": \"$code\"}");
+
+    debugPrint(post.body);
+    if (post.statusCode == 200) {
+      var js = jsonDecode(post.body);
+      debugPrint(js["result"]["status"]);
+    }
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context)
+    {
+      cameraController.stop();
+      return const ScanAttendeeResultWidget();
+    });
+
+
+
+      /*showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          cameraController.stop();
+          return AlertDialog(
+            title: Text("Success"),
+            content: Text("Saved successfully"),
+            actions: [
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    cameraController.start();
+                  },
+                  child: Text("Close")),
+            ],
+          );
+        });*/
   }
 }
