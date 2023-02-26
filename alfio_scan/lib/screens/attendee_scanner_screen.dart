@@ -16,6 +16,7 @@ import 'dart:convert';
 
 
 import '../model/stat_event_model.dart';
+import '../model/ticket_checkin_result.dart';
 
 class AttendeeScannerScreenWidget extends StatefulWidget {
   AttendeeScannerScreenWidget({Key? key, required this.account, required this.event}) : super(key: key);
@@ -159,15 +160,17 @@ class _AttendeeScannerScreenWidgetState extends State<AttendeeScannerScreenWidge
     if (post.statusCode == 200) {
       var js = jsonDecode(post.body);
       debugPrint(js["result"]["status"]);
-    }
 
-    showDialog(
-        context: context,
-        builder: (BuildContext context)
-    {
-      cameraController.stop();
-      return const ScanAttendeeResultWidget();
-    });
+
+
+
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            //cameraController.stop();
+            return ScanAttendeeResultWidget(TicketAndCheckInResult.fromJson(js));
+          });
+    }
 
 
 

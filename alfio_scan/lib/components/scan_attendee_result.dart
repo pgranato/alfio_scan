@@ -1,3 +1,5 @@
+import 'package:alfio_scan/model/ticket_checkin_result.dart';
+
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
@@ -8,14 +10,22 @@ import 'package:provider/provider.dart';
 
 
 class ScanAttendeeResultWidget extends StatefulWidget {
-  const ScanAttendeeResultWidget({Key? key}) : super(key: key);
+
+  TicketAndCheckInResult ticketAndCheckInResult;
+
+  ScanAttendeeResultWidget(this.ticketAndCheckInResult, {Key? key}) : super(key: key);
 
   @override
   _ScanAttendeeResultWidgetState createState() =>
-      _ScanAttendeeResultWidgetState();
+      _ScanAttendeeResultWidgetState(ticketAndCheckInResult);
 }
 
 class _ScanAttendeeResultWidgetState extends State<ScanAttendeeResultWidget> {
+
+  TicketAndCheckInResult ticketAndCheckInResult;
+
+  _ScanAttendeeResultWidgetState(this.ticketAndCheckInResult);
+
 
 
   @override
@@ -52,21 +62,34 @@ class _ScanAttendeeResultWidgetState extends State<ScanAttendeeResultWidget> {
               ),
             ),
             Text(
-              'Hello World',
-              style: FlutterFlowTheme.of(context).bodyText1,
+              ticketAndCheckInResult.ticket.fullName,
+              textAlign: TextAlign.center,
+              style: FlutterFlowTheme.of(context).title1,
             ),
             Text(
-              'Hello World',
-              style: FlutterFlowTheme.of(context).bodyText1,
+              ticketAndCheckInResult.ticket.categoryName,
+              textAlign: TextAlign.center,
+              style: FlutterFlowTheme.of(context).title3,
             ),
             Text(
-              'Hello World',
+              ticketAndCheckInResult.ticket.uuid,
+              textAlign: TextAlign.center,
               style: FlutterFlowTheme.of(context).bodyText1,
+            ),
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                children: [],
+              ),
             ),
             Spacer(),
             FFButtonWidget(
               onPressed: () {
                 print('Button pressed ...');
+                Navigator.of(context).pop();
+
               },
               text: 'Button',
               options: FFButtonOptions(
