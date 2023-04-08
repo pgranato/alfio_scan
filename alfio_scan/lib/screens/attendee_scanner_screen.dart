@@ -1,6 +1,7 @@
 import 'package:alfio_scan/components/scan_attendee_result.dart';
 import 'package:intl/intl.dart';
 
+import '../components/stats_widget.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
@@ -13,7 +14,6 @@ import '../model/event_model.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 
 import '../model/stat_event_model.dart';
 import '../model/ticket_checkin_result.dart';
@@ -90,17 +90,7 @@ class _AttendeeScannerScreenWidgetState extends State<AttendeeScannerScreenWidge
                 flex: 1,
                 child: Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(20, 12, 20, 0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "${statEventModel.stats.checkedIn} / ${statEventModel.stats.totalAttendees} at ${statEventModel.stats.lastUpdate}",
-                        style: FlutterFlowTheme.of(context).title2,
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
+                  child: StatsWidget(),
                 ),
               ),
               Expanded(
@@ -118,26 +108,9 @@ class _AttendeeScannerScreenWidgetState extends State<AttendeeScannerScreenWidge
                             debugPrint('Failed to scan Barcode');
                           } else {
                             final String code = barcode.rawValue!;
-                            checkinTicket(code, context);
+                            checkinTicket(code, context, statEventModel);
                           }
                         }),
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(20, 12, 20, 0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "${statEventModel.stats.checkedIn} / ${statEventModel.stats.totalAttendees} at ${statEventModel.stats.lastUpdate}",
-                        style: FlutterFlowTheme.of(context).title2,
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
                   ),
                 ),
               ),
@@ -146,35 +119,36 @@ class _AttendeeScannerScreenWidgetState extends State<AttendeeScannerScreenWidge
         }));
   }
 
-  Future<void> checkinTicket(String code, BuildContext context) async {
+  Future<void> checkinTicket(String code, BuildContext context, StatEventModel statEventModel) async {
     debugPrint('Barcode found! $code');
 
     String tickedId = code.split("/").first;
     String path = "/admin/api/check-in/event/${event.key}/ticket/$tickedId";
-    var post = await http.post(Uri.parse(account.baseUrl + path), headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      'Authorization': 'ApiKey ${account.apiKey}',
-    }, body: "{\"code\": \"$code\"}");
+    var post = await http.post(Uri.parse(account.baseUrl + path),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'ApiKey ${account.apiKey}',
+        },
+        body: "{\"code\": \"$code\"}");
 
     debugPrint(post.body);
     if (post.statusCode == 200) {
       var js = jsonDecode(post.body);
       debugPrint(js["result"]["status"]);
 
-
-
-
       showDialog(
           context: context,
           builder: (BuildContext context) {
-            //cameraController.stop();
+            cameraController.stop();
             return ScanAttendeeResultWidget(TicketAndCheckInResult.fromJson(js));
-          });
+          }).then((value) {
+        debugPrint("Dialog closed");
+        statEventModel.loadStatData();
+        cameraController.start();
+      });
     }
 
-
-
-      /*showDialog(
+    /*showDialog(
         context: context,
         builder: (BuildContext context) {
           cameraController.stop();

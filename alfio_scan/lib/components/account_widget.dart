@@ -7,6 +7,7 @@ import '../flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../model/account_model.dart';
 
@@ -25,10 +26,65 @@ class _AccountWidgetState extends State<AccountWidget> {
 
   Account account;
 
+
   @override
   Widget build(BuildContext context) {
-    // todo capire come FF gestisce lo stato e se sta cosa serve
-    //context.watch<FFAppState>();
+    return Slidable(
+      startActionPane: ActionPane(
+        extentRatio: 0.3,
+        // A motion is a widget used to control how the pane animates.
+        motion: ScrollMotion(),
+
+        // All actions are defined in the children parameter.
+        children: [
+          // A SlidableAction can have an icon and/or a label.
+          SlidableAction(
+            onPressed: (_) {
+              Provider.of<AccountModel>(context, listen: false).deleteAccount(account);
+            },
+            backgroundColor: Color(0xFFFE4A49),
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            label: 'Delete',
+          )
+        ],
+      ),
+
+      child: ListTile(
+        onTap:  () {
+          Provider.of<EventModel>(context, listen: false).setAccountData(account);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const EventListWidget()),
+          );
+        },
+        title: Text(
+          account.description,
+          style: FlutterFlowTheme
+              .of(context)
+              .title3,
+        ),
+        subtitle: Text(
+          account.baseUrl,
+          style: FlutterFlowTheme
+              .of(context)
+              .subtitle2,
+        ),
+        trailing: Icon(
+          Icons.arrow_forward_ios,
+          color: Color(0xFF303030),
+          size: 20,
+        ),
+        tileColor: Color(0xFFF5F5F5),
+        dense: false,
+    ),);
+  }
+
+   /*
+
+
+  @override
+  Widget build(BuildContext context) {
 
     return GestureDetector(
       onTap: () {
@@ -124,4 +180,8 @@ class _AccountWidgetState extends State<AccountWidget> {
       ),
     );
   }
+
+    */
+
+
 }

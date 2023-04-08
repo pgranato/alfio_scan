@@ -13,6 +13,8 @@ import '../model/account_model.dart';
 import '../model/event_model.dart';
 import 'package:intl/intl.dart';
 
+import '../model/stat_event_model.dart';
+
 
 class EventWidget extends StatefulWidget {
   EventWidget({Key? key, required this.account, required this.event}) : super(key: key);
@@ -39,6 +41,7 @@ class _EventWidgetState extends State<EventWidget> {
 
     return GestureDetector(
       onTap: () {
+        Provider.of<StatEventModel>(context, listen: false).setAccountData(account, event);
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => EventDetailsWidget(account: account, event: event)),

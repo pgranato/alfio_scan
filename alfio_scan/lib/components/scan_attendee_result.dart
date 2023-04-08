@@ -62,17 +62,27 @@ class _ScanAttendeeResultWidgetState extends State<ScanAttendeeResultWidget> {
               ),
             ),
             Text(
-              ticketAndCheckInResult.ticket.fullName,
+              ticketAndCheckInResult.checkInResult.status,
+              textAlign: TextAlign.center,
+              style: FlutterFlowTheme.of(context).title1.merge(TextStyle(color: Colors.red)),
+            ),
+            Text(
+              ticketAndCheckInResult.checkInResult.message,
+              textAlign: TextAlign.center,
+              style: FlutterFlowTheme.of(context).title1.merge(TextStyle(color: Colors.red)),
+            ),
+            Text(
+              ticketAndCheckInResult.ticket!.fullName,
               textAlign: TextAlign.center,
               style: FlutterFlowTheme.of(context).title1,
             ),
             Text(
-              ticketAndCheckInResult.ticket.categoryName,
+              ticketAndCheckInResult.ticket!.categoryName,
               textAlign: TextAlign.center,
               style: FlutterFlowTheme.of(context).title3,
             ),
             Text(
-              ticketAndCheckInResult.ticket.uuid,
+              ticketAndCheckInResult.ticket!.uuid,
               textAlign: TextAlign.center,
               style: FlutterFlowTheme.of(context).bodyText1,
             ),
@@ -87,11 +97,10 @@ class _ScanAttendeeResultWidgetState extends State<ScanAttendeeResultWidget> {
             Spacer(),
             FFButtonWidget(
               onPressed: () {
-                print('Button pressed ...');
                 Navigator.of(context).pop();
 
               },
-              text: 'Button',
+              text: 'Close',
               options: FFButtonOptions(
                 width: 130,
                 height: 40,

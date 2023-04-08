@@ -4,11 +4,17 @@ import 'package:alfio_scan/screens/event_details.dart';
 import 'package:alfio_scan/screens/event_list.dart';
 import 'package:flutter/material.dart';
 import 'package:alfio_scan/screens/account_list.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 
 import 'model/event_model.dart';
 
-void main() {
+Future<void> main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(AccountAdapter());
+  Hive.registerAdapter(AccountTypeAdapter());
+
   runApp(const MyApp());
 }
 

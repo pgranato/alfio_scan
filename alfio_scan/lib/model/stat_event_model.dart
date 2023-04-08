@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -27,6 +29,12 @@ class StatEventModel extends ChangeNotifier {
     this.account = account;
     this.event = event;
     loadStatData();
+    final periodicTimer = Timer.periodic(
+      const Duration(seconds: 5),
+          (timer) {
+        loadStatData();
+      },
+    );
 
   }
 
@@ -60,6 +68,12 @@ class StatEvent {
     checkedIn = json["checkedIn"];
     lastUpdate = json["lastUpdate"];
 
+  }
+
+  String formatLastUpdate() {
+    var dateTime = DateTime.fromMillisecondsSinceEpoch(lastUpdate, isUtc: true);
+    var format = DateFormat('dd/MM/yyyy HH:mm:ss').format(dateTime);
+    return format;
   }
 
 }

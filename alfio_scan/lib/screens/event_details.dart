@@ -2,6 +2,7 @@ import 'package:alfio_scan/model/stat_event_model.dart';
 import 'package:alfio_scan/screens/attendee_scanner_screen.dart';
 import 'package:intl/intl.dart';
 
+import '../components/stats_widget.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
@@ -108,10 +109,13 @@ class _EventDetailsWidgetState extends State<EventDetailsWidget> {
               ),
             ),
             Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(20, 12, 20, 0),
+              child: StatsWidget(),
+            ),
+            Padding(
               padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 24),
               child: FFButtonWidget(
                 onPressed: () {
-                  Provider.of<StatEventModel>(context, listen: false).setAccountData(account, event);
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => AttendeeScannerScreenWidget(account: account, event: event)),

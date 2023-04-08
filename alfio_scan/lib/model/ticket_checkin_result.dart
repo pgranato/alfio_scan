@@ -7,7 +7,11 @@ class TicketAndCheckInResult {
   List<AdditionalService> additionalServices = [];
 
   TicketAndCheckInResult.fromJson(Map<String, dynamic> json) {
-    ticket = Ticket.fromJson(json["ticket"]);
+    if (json["ticket"] != null) {
+      ticket = Ticket.fromJson(json["ticket"]);
+    } else {
+      ticket = Ticket.blank();
+    }
     checkInResult = CheckInResult.fromJson(json["result"]);
     if (json["additionalServices"] != null) {
       additionalServices = (json['additionalServices'] as List).map((e) => AdditionalService.fromJson(e)).toList();
@@ -46,4 +50,10 @@ class Ticket {
     categoryName = json["categoryName"];
     uuid = json["uuid"];
   }
+
+   Ticket.blank() {
+     fullName ="";
+     categoryName = "";
+     uuid = "";
+   }
 }

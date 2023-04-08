@@ -22,7 +22,22 @@ class _AccountScannerScreenWidgetState extends State<AccountScannerScreenWidget>
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Mobile Scanner'),
+          backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+          automaticallyImplyLeading: false,
+          leading: InkWell(
+            onTap: () async {
+              Navigator.pop(context);
+            },
+            child: Icon(
+              Icons.chevron_left_rounded,
+              color: FlutterFlowTheme.of(context).primaryText,
+              size: 32,
+            ),
+          ),
+          title: Text(
+            "Add account",
+            style: FlutterFlowTheme.of(context).subtitle1,
+          ),
           actions: [
             IconButton(
               color: Colors.white,
@@ -40,23 +55,9 @@ class _AccountScannerScreenWidgetState extends State<AccountScannerScreenWidget>
               iconSize: 32.0,
               onPressed: () => cameraController.toggleTorch(),
             ),
-            IconButton(
-              color: Colors.white,
-              icon: ValueListenableBuilder(
-                valueListenable: cameraController.cameraFacingState,
-                builder: (context, state, child) {
-                  switch (state as CameraFacing) {
-                    case CameraFacing.front:
-                      return const Icon(Icons.camera_front);
-                    case CameraFacing.back:
-                      return const Icon(Icons.camera_rear);
-                  }
-                },
-              ),
-              iconSize: 32.0,
-              onPressed: () => cameraController.switchCamera(),
-            ),
           ],
+          centerTitle: false,
+          elevation: 0,
         ),
         body: MobileScanner(
           controller: cameraController,
@@ -68,7 +69,9 @@ class _AccountScannerScreenWidgetState extends State<AccountScannerScreenWidget>
               final String code = barcode.rawValue!;
               debugPrint('Barcode found! $code');
               //TODO
-              Provider.of<AccountModel>(context, listen: false).addAccountFromJson("{\"baseUrl\":\"https://m4.test.alf.io\",\"apiKey\":\"2a47074c-6988-4024-91a2-09d1b9d67996\"}");
+              //Provider.of<AccountModel>(context, listen: false).addAccountFromJson("{\"baseUrl\":\"https://m4.test.alf.io\",\"apiKey\":\"2a47074c-6988-4024-91a2-09d1b9d67996\"}");
+              Provider.of<AccountModel>(context, listen: false).addAccountFromJson(code);
+              Navigator.of(context).pop();
             }
           },
         ));
