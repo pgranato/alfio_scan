@@ -1,8 +1,10 @@
 import 'package:alfio_scan/model/stat_event_model.dart';
 import 'package:alfio_scan/screens/attendee_scanner_screen.dart';
+import 'package:alfio_scan/screens/search_attendees_screen.dart';
 import 'package:intl/intl.dart';
 
 import '../components/stats_widget.dart';
+import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
@@ -55,7 +57,28 @@ class _EventDetailsWidgetState extends State<EventDetailsWidget> {
           'Event Details',
           style: FlutterFlowTheme.of(context).title2,
         ),
-        actions: [],
+        actions: [
+          Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 12, 0),
+            child: FlutterFlowIconButton(
+              borderColor: Colors.transparent,
+              borderRadius: 30,
+              borderWidth: 1,
+              buttonSize: 60,
+              icon: Icon(
+                Icons.search,
+                color: Color(0xFF57636C),
+                size: 30,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SearchAttendeesWidget(account: account, event: event)),
+                );
+              },
+            ),
+          ),
+        ],
         centerTitle: false,
         elevation: 0,
       ),

@@ -13,12 +13,14 @@ class StatsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<StatEventModel>(builder: (context, statEventModel, child) {
-      return Row(
+      return Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          Text("Stats at ${statEventModel.stats.formatLastUpdate()}",
+                style: FlutterFlowTheme.of(context).subtitle2,),
           Text(
-            "${statEventModel.stats.checkedIn} / ${statEventModel.stats.totalAttendees} at ${statEventModel.stats.formatLastUpdate()}",
+            "${statEventModel.stats.checkedIn} / ${statEventModel.stats.totalAttendees} checked in",
             style: FlutterFlowTheme.of(context).title2,
             textAlign: TextAlign.center,
           ),

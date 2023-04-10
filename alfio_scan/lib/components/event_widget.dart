@@ -68,24 +68,21 @@ class _EventWidgetState extends State<EventWidget> {
               children: [
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
+                    padding: const EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(
-                          height: 44,
-                          decoration: BoxDecoration(
-                            color: Color(0xFF4B39EF),
-                            shape: BoxShape.rectangle,
-                          ),
-                          child: Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(2, 2, 2, 2),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            height: 48,
                             child: ClipRRect(
+                              borderRadius: BorderRadius.circular(4),
                               child: Image.network(
                                 event.baseUrl+event.imageUrl,
-                                fit: BoxFit.cover,
+                                fit: BoxFit.scaleDown,
                               ),
                             ),
                           ),

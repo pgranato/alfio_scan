@@ -1,6 +1,7 @@
 import 'package:alfio_scan/model/account_model.dart';
 
 import '../components/event_widget.dart';
+import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +53,7 @@ class _EventListWidgetState extends State<EventListWidget> {
           'Events',
           style: FlutterFlowTheme.of(context).title2,
         ),
-        actions: [],
+
         centerTitle: false,
         elevation: 0,
       ),
