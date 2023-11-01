@@ -14,7 +14,7 @@ import '../model/event_model.dart';
 import 'package:intl/intl.dart';
 
 import '../model/stat_event_model.dart';
-
+import '../screens/sponsor_event_details.dart';
 
 class EventWidget extends StatefulWidget {
   EventWidget({Key? key, required this.account, required this.event}) : super(key: key);
@@ -27,7 +27,6 @@ class EventWidget extends StatefulWidget {
 }
 
 class _EventWidgetState extends State<EventWidget> {
-
   _EventWidgetState(this.account, this.event);
 
   Account account;
@@ -35,17 +34,23 @@ class _EventWidgetState extends State<EventWidget> {
 
   @override
   Widget build(BuildContext context) {
-
     // todo
     //context.watch<FFAppState>();
 
     return GestureDetector(
       onTap: () {
-        Provider.of<StatEventModel>(context, listen: false).setAccountData(account, event);
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => EventDetailsWidget(account: account, event: event)),
-        );
+        if (account.accountType == AccountType.SPONSOR) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SponsorEventDetailsWidget(account: account, event: event)),
+          );
+        } else {
+          Provider.of<StatEventModel>(context, listen: false).setAccountData(account, event);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => EventDetailsWidget(account: account, event: event)),
+          );
+        }
       },
       child: Padding(
         padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 1),
@@ -81,7 +86,7 @@ class _EventWidgetState extends State<EventWidget> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(4),
                               child: Image.network(
-                                event.baseUrl+event.imageUrl,
+                                event.baseUrl + event.imageUrl,
                                 fit: BoxFit.scaleDown,
                               ),
                             ),
