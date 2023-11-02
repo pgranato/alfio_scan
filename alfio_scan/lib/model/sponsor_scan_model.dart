@@ -33,6 +33,8 @@ class SponsorScanModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void deleteSponsorScan(SponsorScan sponsorScan) {}
+
 }
 
 @HiveType(typeId: 3)

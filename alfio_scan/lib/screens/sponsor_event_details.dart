@@ -1,3 +1,4 @@
+import 'package:alfio_scan/components/scanned_badge_widget.dart';
 import 'package:alfio_scan/model/sponsor_scan_model.dart';
 import 'package:alfio_scan/model/stat_event_model.dart';
 import 'package:alfio_scan/screens/attendee_scanner_screen.dart';
@@ -68,49 +69,58 @@ class _SponsorEventDetailsWidgetState extends State<SponsorEventDetailsWidget> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(20, 12, 20, 0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(
-                    child: Text(
-                      event.name,
-                      style: FlutterFlowTheme.of(context).title2,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(20, 4, 20, 0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(
-                    child: Text(
-                      DateFormat.EEEE().add_yMMMMd().add_Hm().format(event.startingDate),
-                      style: FlutterFlowTheme.of(context).subtitle1.override(
-                        fontFamily: 'Poppins',
-                        color: FlutterFlowTheme.of(context).primaryColor,
+            Container(
+              color: Colors.white,
+              child: Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(20, 12, 20, 0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        event.name,
+                        style: FlutterFlowTheme.of(context).title2,
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(20, 12, 20, 0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(
-                    child: Text(
-                      'AABABABA',
-                      style: FlutterFlowTheme.of(context).bodyText2,
+            Container(
+              color: Colors.white,
+              child: Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(20, 4, 20, 0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        DateFormat.EEEE().add_yMMMMd().add_Hm().format(event.startingDate),
+                        style: FlutterFlowTheme.of(context).subtitle1.override(
+                          fontFamily: 'Poppins',
+                          color: FlutterFlowTheme.of(context).primaryColor,
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              color: Colors.white,
+              child: Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(20, 12, 20, 0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'AABABABA',
+                        style: FlutterFlowTheme.of(context).bodyText2,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             Expanded(
@@ -118,24 +128,16 @@ class _SponsorEventDetailsWidgetState extends State<SponsorEventDetailsWidget> {
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-
-
                     Padding(
-                      
                       padding: EdgeInsets.all(5),
                       child: Consumer<SponsorScanModel>(builder: (context, scanModel, child) {
-                        return ListView.builder(
-                            padding: EdgeInsets.zero,
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: scanModel.sponsorScans.length,
-                            itemBuilder: (context, index) {
-                              return Text(scanModel.sponsorScans[index].badgeCode);
-                            });
+                        return Column(
+                          children: List.generate(scanModel.sponsorScans.length, (index) {
+                            return ScannedBadgeWidget(sponsorScan: scanModel.sponsorScans[index]);
+                          }),
+                        );
                       }),
                     ),
-
-
                   ],
                 ),
               ),
