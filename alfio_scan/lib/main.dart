@@ -19,6 +19,8 @@ Future<void> main() async {
   Hive.registerAdapter(ScanStatusAdapter());
   Hive.registerAdapter(LeadStatusAdapter());
 
+  //A COMMENT
+
   runApp(const MyApp());
 }
 
