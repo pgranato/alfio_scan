@@ -1,4 +1,5 @@
 import 'package:alfio_scan/components/scan_attendee_result.dart';
+import 'package:alfio_scan/model/sponsor_scan_model.dart';
 import 'package:intl/intl.dart';
 
 import '../components/stats_widget.dart';
@@ -137,6 +138,10 @@ class _SponsorAttendeeScannerScreenWidgetState extends State<SponsorAttendeeScan
     setState(() {
       scannedBadges.insert(0, "${split[1]} ${split[2]}");
     });
+
+    Provider.of<SponsorScanModel>(context, listen: false).addNewScan(event.key, code, "${split[1]} ${split[2]}");
+
+
 
 
     /*showDialog(

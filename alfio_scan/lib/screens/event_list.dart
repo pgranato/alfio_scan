@@ -58,60 +58,65 @@ class _EventListWidgetState extends State<EventListWidget> {
         elevation: 0,
       ),
       body: SafeArea(
-        child: GestureDetector(
-          //onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).secondaryBackground,
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 3,
-                        color: Color(0x33000000),
-                        offset: Offset(0, 1),
-                      )
-                    ],
-                  ),
-                  child: Align(
-                    alignment: AlignmentDirectional(0, 0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding:
-                            EdgeInsetsDirectional.fromSTEB(16, 0, 16, 12),
-                            child: Text(
-                              'This is the list of the events currently available for the selected account. Select an event to start checking in attendees.',
-                              style: FlutterFlowTheme.of(context).bodyText2,
-                            ),
-                          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: FlutterFlowTheme.of(context).secondaryBackground,
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 3,
+                    color: Color(0x33000000),
+                    offset: Offset(0, 1),
+                  )
+                ],
+              ),
+              child: Align(
+                alignment: AlignmentDirectional(0, 0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding:
+                        EdgeInsetsDirectional.fromSTEB(16, 0, 16, 12),
+                        child: Text(
+                          'This is the list of the events currently available for the selected account. Select an event to start checking in attendees.',
+                          style: FlutterFlowTheme.of(context).bodyText2,
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 1, 0, 0),
-                  child: Consumer<EventModel>(builder: (context, eventModel, child) {
-                    return ListView.builder(
-                        padding: EdgeInsets.zero,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
-                        itemCount: eventModel.events.length,
-                        itemBuilder: (context, index) {
-                          return EventWidget(account: eventModel.account, event: eventModel.events[index]);
-                        });
-                  }),
-                ),
-              ],
+              ),
             ),
-          ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 1, 0, 0),
+                      child: Consumer<EventModel>(builder: (context, eventModel, child) {
+                        return ListView.builder(
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: eventModel.events.length,
+                            itemBuilder: (context, index) {
+                              return EventWidget(account: eventModel.account, event: eventModel.events[index]);
+                            });
+                      }),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:alfio_scan/model/account_model.dart';
 import 'package:alfio_scan/model/stat_event_model.dart';
+import 'package:alfio_scan/model/sponsor_scan_model.dart';
 import 'package:alfio_scan/screens/event_details.dart';
 import 'package:alfio_scan/screens/event_list.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,9 @@ Future<void> main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(AccountAdapter());
   Hive.registerAdapter(AccountTypeAdapter());
+  Hive.registerAdapter(SponsorScanAdapter());
+  Hive.registerAdapter(ScanStatusAdapter());
+  Hive.registerAdapter(LeadStatusAdapter());
 
   runApp(const MyApp());
 }
@@ -28,6 +32,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => AccountModel()),
         ChangeNotifierProvider(create: (context) => EventModel()),
+        ChangeNotifierProvider(create: (context) => SponsorScanModel()),
         ChangeNotifierProvider(create: (context) => StatEventModel())
       ],
       child: MaterialApp(

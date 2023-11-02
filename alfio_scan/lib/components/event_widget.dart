@@ -38,6 +38,7 @@ class _EventWidgetState extends State<EventWidget> {
     //context.watch<FFAppState>();
 
     return GestureDetector(
+      behavior: HitTestBehavior.translucent,
       onTap: () {
         if (account.accountType == AccountType.SPONSOR) {
           Navigator.push(

@@ -1,9 +1,11 @@
+import 'package:alfio_scan/model/sponsor_scan_model.dart';
 import 'package:alfio_scan/model/stat_event_model.dart';
 import 'package:alfio_scan/screens/attendee_scanner_screen.dart';
 import 'package:alfio_scan/screens/search_attendees_screen.dart';
 import 'package:alfio_scan/screens/sponsor_attendee_scanner_screen.dart';
 import 'package:intl/intl.dart';
 
+import '../components/event_widget.dart';
 import '../components/stats_widget.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
@@ -62,9 +64,9 @@ class _SponsorEventDetailsWidgetState extends State<SponsorEventDetailsWidget> {
         centerTitle: false,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
+      body: SafeArea(
         child: Column(
-          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(20, 12, 20, 0),
@@ -89,9 +91,9 @@ class _SponsorEventDetailsWidgetState extends State<SponsorEventDetailsWidget> {
                     child: Text(
                       DateFormat.EEEE().add_yMMMMd().add_Hm().format(event.startingDate),
                       style: FlutterFlowTheme.of(context).subtitle1.override(
-                            fontFamily: 'Poppins',
-                            color: FlutterFlowTheme.of(context).primaryColor,
-                          ),
+                        fontFamily: 'Poppins',
+                        color: FlutterFlowTheme.of(context).primaryColor,
+                      ),
                     ),
                   ),
                 ],
@@ -104,16 +106,42 @@ class _SponsorEventDetailsWidgetState extends State<SponsorEventDetailsWidget> {
                 children: [
                   Expanded(
                     child: Text(
-                      '',
+                      'AABABABA',
                       style: FlutterFlowTheme.of(context).bodyText2,
                     ),
                   ),
                 ],
               ),
             ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
 
+
+                    Padding(
+                      
+                      padding: EdgeInsets.all(5),
+                      child: Consumer<SponsorScanModel>(builder: (context, scanModel, child) {
+                        return ListView.builder(
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: scanModel.sponsorScans.length,
+                            itemBuilder: (context, index) {
+                              return Text(scanModel.sponsorScans[index].badgeCode);
+                            });
+                      }),
+                    ),
+
+
+                  ],
+                ),
+              ),
+            ),
             Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 24),
+              padding: EdgeInsets.all(20),
               child: FFButtonWidget(
                 onPressed: () {
                   Navigator.push(
@@ -127,9 +155,9 @@ class _SponsorEventDetailsWidgetState extends State<SponsorEventDetailsWidget> {
                   height: 60,
                   color: FlutterFlowTheme.of(context).primaryColor,
                   textStyle: FlutterFlowTheme.of(context).title3.override(
-                        fontFamily: 'Poppins',
-                        color: Colors.white,
-                      ),
+                    fontFamily: 'Poppins',
+                    color: Colors.white,
+                  ),
                   elevation: 3,
                   borderSide: BorderSide(
                     color: Colors.transparent,
