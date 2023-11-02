@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:alfio_scan/model/sponsor_scan_model.dart';
 import 'package:alfio_scan/screens/event_details.dart';
 import 'package:intl/intl.dart';
 
@@ -41,6 +42,7 @@ class _EventWidgetState extends State<EventWidget> {
       behavior: HitTestBehavior.translucent,
       onTap: () {
         if (account.accountType == AccountType.SPONSOR) {
+          Provider.of<SponsorScanModel>(context, listen: false).setCurrentEvent(event);
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => SponsorEventDetailsWidget(account: account, event: event)),

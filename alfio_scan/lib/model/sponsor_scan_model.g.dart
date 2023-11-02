@@ -22,13 +22,14 @@ class SponsorScanAdapter extends TypeAdapter<SponsorScan> {
       fields[2] as ScanStatus,
       fields[3] as LeadStatus,
       fields[4] as String,
+      fields[5] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, SponsorScan obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.eventKey)
       ..writeByte(1)
@@ -38,7 +39,9 @@ class SponsorScanAdapter extends TypeAdapter<SponsorScan> {
       ..writeByte(3)
       ..write(obj.leadStatus)
       ..writeByte(4)
-      ..write(obj.attendeeFullName);
+      ..write(obj.attendeeFullName)
+      ..writeByte(5)
+      ..write(obj.comment);
   }
 
   @override

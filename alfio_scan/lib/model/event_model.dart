@@ -33,7 +33,6 @@ class EventModel extends ChangeNotifier {
     developer.log("events response " + response.body);
     if (response.statusCode == 200) {
       var js = jsonDecode(response.body);
-      for(int i=0; i<20; i++) //TODO REMOVE THIS
       for (var ejs in js) {
         Event e = Event.fromJson(ejs);
         e.baseUrl = account.baseUrl;

@@ -1,3 +1,4 @@
+import 'package:alfio_scan/model/event_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
@@ -13,27 +14,48 @@ class SponsorScanModel extends ChangeNotifier {
   SponsorScanModel() {
     debugPrint("SponsorScanModel init");
 
-    loadData();
   }
 
-  loadData() async {
-    var sponsorScanBox = await Hive.openBox('sponsorScanBox');
+  loadData(Event event) async {
+    var sponsorScanBox = await Hive.openBox<SponsorScan>('sponsorScanBox');
 
-    sponsorScans = sponsorScanBox.values.cast<SponsorScan>().toList();
+    print(sponsorScanBox.values.length);
+    sponsorScans = sponsorScanBox.values.where((sponsorScan) => sponsorScan.eventKey==event.key).cast<SponsorScan>().toList();
+
 
     notifyListeners();
   }
 
-  addNewScan(String eventKey, String badgeCode, String attendeeFullName) {
+  addNewScan(String eventKey, String badgeCode, String attendeeFullName) async {
 
-    var sponsorScan = SponsorScan(eventKey, badgeCode, ScanStatus.NEW, LeadStatus.WARM, attendeeFullName);
+    var sponsorScan = SponsorScan(eventKey, badgeCode, ScanStatus.NEW, LeadStatus.WARM, attendeeFullName, "");
     sponsorScans.add(sponsorScan);
-    var box = Hive.box("sponsorScanBox");
-    box.add(sponsorScan);
+    Box<SponsorScan> box;
+    if (Hive.isBoxOpen('sponsorscanbox')) {
+      box = Hive.box<SponsorScan>('sponsorscanbox');
+    } else {
+      box = await Hive.openBox<SponsorScan>('sponsorscanbox');
+    }
+    box.put(sponsorScan.badgeCode, sponsorScan);
+    print(box.values.length);
     notifyListeners();
   }
 
   void deleteSponsorScan(SponsorScan sponsorScan) {}
+
+  void setCurrentEvent(Event event) {
+    loadData(event);
+  }
+
+  Future<void> updateSponsorScan(SponsorScan updatedSponsorScan) async {
+    Box<SponsorScan> box;
+    if (Hive.isBoxOpen('sponsorscanbox')) {
+      box = Hive.box<SponsorScan>('sponsorscanbox');
+    } else {
+      box = await Hive.openBox<SponsorScan>('sponsorscanbox');
+    }
+    box.put(updatedSponsorScan.badgeCode, updatedSponsorScan);
+  }
 
 }
 
@@ -49,8 +71,10 @@ class SponsorScan {
   late LeadStatus leadStatus;
   @HiveField(4)
   late String attendeeFullName;
+  @HiveField(5)
+  late String comment;
 
-  SponsorScan(this.eventKey, this.badgeCode, this.scanStatus, this.leadStatus, this.attendeeFullName);
+  SponsorScan(this.eventKey, this.badgeCode, this.scanStatus, this.leadStatus, this.attendeeFullName, this.comment);
 }
 
 @HiveType(typeId: 4)

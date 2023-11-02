@@ -94,27 +94,14 @@ class _EventListWidgetState extends State<EventListWidget> {
               ),
             ),
             Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 1, 0, 0),
-                      child: Consumer<EventModel>(builder: (context, eventModel, child) {
-                        return ListView.builder(
-                            padding: EdgeInsets.zero,
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: eventModel.events.length,
-                            itemBuilder: (context, index) {
-                              return EventWidget(account: eventModel.account, event: eventModel.events[index]);
-                            });
-                      }),
-                    ),
-                  ],
-                ),
-              ),
+              child: Consumer<EventModel>(builder: (context, eventModel, child) {
+                return ListView.builder(
+                  itemCount: eventModel.events.length,
+                  itemBuilder: (context, index) {
+                    return EventWidget(account: eventModel.account, event: eventModel.events[index]);
+                  },
+                );
+              }),
             ),
           ],
         ),

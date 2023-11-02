@@ -142,28 +142,31 @@ class _SponsorEventDetailsWidgetState extends State<SponsorEventDetailsWidget> {
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.all(20),
-              child: FFButtonWidget(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SponsorAttendeeScannerScreenWidget(account: account, event: event)),
-                  );
-                },
-                text: 'Scan Attendees',
-                options: FFButtonOptions(
-                  width: 300,
-                  height: 60,
-                  color: FlutterFlowTheme.of(context).primaryColor,
-                  textStyle: FlutterFlowTheme.of(context).title3.override(
-                    fontFamily: 'Poppins',
-                    color: Colors.white,
-                  ),
-                  elevation: 3,
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
-                    width: 1,
+            Container(
+              color: Colors.white,
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: FFButtonWidget(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SponsorAttendeeScannerScreenWidget(account: account, event: event)),
+                    );
+                  },
+                  text: 'Scan Attendees',
+                  options: FFButtonOptions(
+                    width: 300,
+                    height: 60,
+                    color: FlutterFlowTheme.of(context).primaryColor,
+                    textStyle: FlutterFlowTheme.of(context).title3.override(
+                      fontFamily: 'Poppins',
+                      color: Colors.white,
+                    ),
+                    elevation: 3,
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                      width: 1,
+                    ),
                   ),
                 ),
               ),
